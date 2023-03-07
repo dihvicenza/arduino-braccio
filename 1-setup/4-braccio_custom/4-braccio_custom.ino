@@ -58,7 +58,7 @@ void moveHome(int ms) {
 
 void moveTo(int jnt, int angle, int ms) {
 
-  getPos();
+  getPos(); // leggi le posizioni attuali
 
   int c = _curPos[jnt];
   int t = angle;

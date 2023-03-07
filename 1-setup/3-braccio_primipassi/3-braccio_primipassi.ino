@@ -70,17 +70,6 @@ void loop() {
   arm.safeDelay(3000);
   arm.setOneRelative(BASE_ROT, -90);
   arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, 45);
-
-  arm.safeDelay(3000);
-
-  arm.setDelta(BASE_ROT, 3);
-  arm.setOneRelative(BASE_ROT, 45);
-  arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, -90);
-  arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, 45);
-  arm.safeDelay(3000);
 
   // arm.setOneRelative(WRIST, 30);  //Set the Wrist to a position 30 degrees past its current position
   // arm.safeDelay(3000);
