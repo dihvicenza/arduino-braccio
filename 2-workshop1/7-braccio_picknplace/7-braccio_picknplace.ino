@@ -1,6 +1,7 @@
 
 #include <Servo.h>
 #include "constants.h"
+#include <string.h>
 
 int _jntCenter[6] = { 90, 82, 91, 98, 102, 70 };
 int _jntCenterMs[6] = {BASE_ROT_CENTER_MS, SHOULDER_CENTER_MS, ELBOW_CENTER_MS, WRIST_CENTER_MS, WRIST_ROT_CENTER_MS, GRIPPER_CENTER_MS};
@@ -13,6 +14,8 @@ int _jntPins[6] = {_BASE_ROT_PIN, _SHOULDER_PIN, _ELBOW_PIN, _WRIST_PIN, _WRIST_
 bool _stopped = false;
 
 Servo _jnt[6];
+
+int valPot;
 
 void _softwarePWM(int high_time, int low_time) {
   digitalWrite(SOFT_START_PIN, HIGH);
@@ -58,7 +61,7 @@ void moveHome(int ms) {
 
 void moveTo(int jnt, int angle, int ms) {
 
-  getPos(); // leggi le posizioni attuali
+  getPos();
 
   int c = _curPos[jnt];
   int t = angle;
@@ -74,6 +77,15 @@ void moveTo(int jnt, int angle, int ms) {
   _curPos[jnt] = c;
 }
 
+void moveAll(int a1, int a2, int a3, int a4, int a5, int a6, int ms) {
+  moveTo(0, a1, ms);
+  moveTo(1, a2, ms);
+  moveTo(2, a3, ms);
+  moveTo(3, a4, ms);
+  moveTo(4, a5, ms);
+  moveTo(5, a6, ms);
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -83,8 +95,7 @@ void setup() {
   digitalWrite(SOFT_START_PIN, LOW);
   _softStart();
 
-  // pinMode(12, OUTPUT); // without soft start    
-  // digitalWrite(12, HIGH);
+  pinMode(A0, INPUT);
 
   for (int i = 0; i < 6; i++) {
     _jnt[i].writeMicroseconds(_jntCenterMs[i]);
@@ -93,27 +104,12 @@ void setup() {
 
   moveHome(100);
 
-  Serial.println("Initalization complete.");
+  Serial.println("Setup complete.");
 }
 
 void loop() {
 
   if (!_stopped) {
-    // moveTo(0, 10, 50);
-    // moveTo(0, 40, 50);
-
-    // moveTo(1, 50, 50);
-    // moveTo(1, 100, 50);
-
-    // moveTo(2, 70, 50);
-    // moveTo(2, 100, 50);
-
-    // moveTo(3, 70, 50);
-    // moveTo(3, 100, 50);
-
-    // moveTo(4, 70, 50);
-    // moveTo(4, 100, 50);
-
     moveTo(5, GRIPPER_MIN, 50);
     moveTo(5, GRIPPER_MAX, 50);
   }
@@ -127,18 +123,35 @@ void loop() {
       moveHome(100); // go to home position when program stops
     }
     else if (input == "go") {
-      _stopped = false;
+      _stopped = true;
       Serial.println(input);
+
+      moveAll(0, 58, 59, 15, 0, 0, 50);
     }
-    else if (input == "h") {
+    else if (input == "home") {
       _stopped = true;
       Serial.println(input);
       moveHome(100);
     }
-    else if (input == "1") {
+    else if (input == "0" | input == "1" | input == "2" | input == "3" | input == "4" | input == "5") {
       _stopped = true;
-      Serial.println(input);
-      moveTo(1, 50, 50);
+      Serial.println("Entering JOG mode");
+      int j = atoi(input.c_str());
+      while(1) {
+        while (Serial.available()==0){
+          valPot = analogRead(A0);
+          int angle = map(valPot, 0, 1023, 0, 180);
+          moveTo(j, angle, 50);
+          Serial.println("Moved " + String(j) + " to " + String(angle));
+          delay(1000);
+        }
+        String input2 = Serial.readString();
+        input2.trim();
+        if (input2 == "stop" | input2 == "") {
+          Serial.println("Exiting manual control");
+          break;
+        }
+      }
     }
   }
 }

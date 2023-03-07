@@ -24,9 +24,16 @@
 
 Braccio arm;
 
+int valPot1;
+int valPot2;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Setting up Braccio with calibration values...");
+
+  pinMode(13, OUTPUT); // LED
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
 
   arm.setJointCenter(BASE_ROT, BASE_ROT_CENTER);
   arm.setJointMin(BASE_ROT, BASE_ROT_MIN);
@@ -52,33 +59,44 @@ void setup() {
   arm.setJointMin(GRIPPER, GRIPPER_MIN);
   arm.setJointMax(GRIPPER, GRIPPER_MAX);
 
-  Serial.println("Set up complete.");
+  arm.begin(true);
 
-  arm.begin(true);  // Start to default vertical position.
+  Serial.println("Set up complete.");
+}
+
+void blink() {
+  digitalWrite(13, HIGH);   
+  delay(1000);              
+  digitalWrite(13, LOW);   
+  delay(1000);             
+}
+
+void moving() {
+  Serial.println("Starting movement");
+  for (int i = 0; i < 3; i++) {
+    blink();
+  }            
+  digitalWrite(13, HIGH);   
+  delay(1000);
+}
+
+void stopped() {
+  digitalWrite(13, LOW);  
+  delay(1000); 
 }
 
 void loop() {
 
-  openGripper();
-  arm.safeDelay(3000);
-
-  closeGripper();
-  arm.safeDelay(3000);
-
-  arm.setDelta(BASE_ROT, 1);
-  arm.setOneRelative(BASE_ROT, 45);
-  arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, -90);
-  arm.safeDelay(3000);
-
-  // arm.setOneRelative(WRIST, 30);  //Set the Wrist to a position 30 degrees past its current position
-  // arm.safeDelay(3000);
-
-  // arm.setOneRelative(WRIST, -30);  //Set the Wrist to a position 30 degrees behind its current position
-  // arm.safeDelay(3000, 20);         //Delay for 3000ms while still updating the movement every 20ms
-
-  // arm.setOneAbsolute(ELBOW, arm.getCenter(ELBOW));
-  // arm.safeDelay(3000);
+  valPot1 = analogRead(A0);
+  valPot2 = analogRead(A1);
+  Serial.println("Pot 1: " + String(valPot1) + " Pot2: " + String(valPot2));
+  int angle1 = map(valPot1, 0, 1023, 0, 180);
+  int angle2 = map(valPot2, 0, 1023, 0, 180);
+  Serial.println("Angolo base: " + String(angle1) + " Angolo gomito: " + String(angle2));
+  arm.setOneAbsolute(BASE_ROT, angle1);
+  arm.safeDelay(1000);
+  arm.setOneAbsolute(ELBOW, angle2);
+  arm.safeDelay(1000);
 }
 
 void openGripper() {

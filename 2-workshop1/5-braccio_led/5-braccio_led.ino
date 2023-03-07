@@ -52,33 +52,51 @@ void setup() {
   arm.setJointMin(GRIPPER, GRIPPER_MIN);
   arm.setJointMax(GRIPPER, GRIPPER_MAX);
 
-  Serial.println("Set up complete.");
+  pinMode(13, OUTPUT); // abbiamo aggiunto la configurazione del pin 13
 
-  arm.begin(true);  // Start to default vertical position.
+  arm.begin(true);
+
+  Serial.println("Set up complete.");
+}
+
+void blink() {
+  digitalWrite(13, HIGH);   
+  delay(1000);              
+  digitalWrite(13, LOW);   
+  delay(1000);             
+}
+
+void moving() {
+  digitalWrite(13, HIGH);   
+  delay(1000);
+}
+
+void stopped() {
+  digitalWrite(13, LOW);  
+  delay(1000); 
 }
 
 void loop() {
 
+  Serial.println("Starting movement");
+
+  for (int i = 0; i < 3; i++) {
+    blink();
+  }            
+
+  moving();
+
   openGripper();
   arm.safeDelay(3000);
-
   closeGripper();
   arm.safeDelay(3000);
 
-  arm.setDelta(BASE_ROT, 1);
-  arm.setOneRelative(BASE_ROT, 45);
+  arm.setOneAbsolute(BASE_ROT, 45);
   arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, -90);
+  arm.setOneRelative(BASE_ROT, -45);
   arm.safeDelay(3000);
 
-  // arm.setOneRelative(WRIST, 30);  //Set the Wrist to a position 30 degrees past its current position
-  // arm.safeDelay(3000);
-
-  // arm.setOneRelative(WRIST, -30);  //Set the Wrist to a position 30 degrees behind its current position
-  // arm.safeDelay(3000, 20);         //Delay for 3000ms while still updating the movement every 20ms
-
-  // arm.setOneAbsolute(ELBOW, arm.getCenter(ELBOW));
-  // arm.safeDelay(3000);
+  stopped();
 }
 
 void openGripper() {

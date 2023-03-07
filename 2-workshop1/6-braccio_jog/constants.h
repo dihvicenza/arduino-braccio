@@ -1,10 +1,8 @@
 #define GRIPPER_CLOSED 95
 #define GRIPPER_OPENED 50
 #define BASE_ROT_CENTER 90
-// #define BASE_ROT_MIN 0
-// #define BASE_ROT_MAX 180
-#define BASE_ROT_MIN 180
-#define BASE_ROT_MAX 0
+#define BASE_ROT_MIN 0
+#define BASE_ROT_MAX 180
 #define SHOULDER_CENTER 82
 #define SHOULDER_MIN 0
 #define SHOULDER_MAX 180
