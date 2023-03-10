@@ -24,17 +24,16 @@ void setup() {
   Braccio.begin(); // Safety position: 90, 45, 180, 180, 90, 10
   Serial.println("Setup completato.");
 
+  // TEST BASE
   // the arm is aligned upwards and the gripper is closed
   //(step delay, M1, M2, M3, M4, M5, M6);
-
-  // TEST BASE
   // Braccio.ServoMovement(20, 0, 90, 90, 90, 0, 73);
   // Braccio.ServoMovement(20, 180, 90, 90, 90, 0, 73);
   
   // TEST SHOULDER
-  // Braccio.ServoMovement(20, 0, 90, 90, 90, 0, 73);
-  // Braccio.ServoMovement(20, 0, 15, 90, 90, 0, 73);
-  // Braccio.ServoMovement(20, 0, 165, 90, 90, 0, 73);
+  Braccio.ServoMovement(20, 0, 90, 90, 90, 0, 73);
+  Braccio.ServoMovement(20, 0, 15, 90, 90, 0, 73);
+  Braccio.ServoMovement(20, 0, 165, 90, 90, 0, 73);
 
   // TEST ELBOW
   // Braccio.ServoMovement(20, 0, 90, 90, 90, 0, 73);

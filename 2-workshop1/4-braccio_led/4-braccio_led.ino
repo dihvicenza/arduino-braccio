@@ -59,50 +59,44 @@ void setup() {
   Serial.println("Set up complete.");
 }
 
-void blink() {
-  digitalWrite(13, HIGH);   
-  delay(1000);              
-  digitalWrite(13, LOW);   
-  delay(1000);             
-}
-
-void moving() {
-  digitalWrite(13, HIGH);   
-  delay(1000);
-}
-
-void stopped() {
-  digitalWrite(13, LOW);  
-  delay(1000); 
-}
-
-void loop() {
-
-  Serial.println("Starting movement");
-
-  for (int i = 0; i < 3; i++) {
-    blink();
-  }            
-
-  moving();
-
-  openGripper();
-  arm.safeDelay(3000);
-  closeGripper();
-  arm.safeDelay(3000);
-
-  arm.setOneAbsolute(BASE_ROT, 45);
-  arm.safeDelay(3000);
-  arm.setOneRelative(BASE_ROT, -45);
-  arm.safeDelay(3000);
-
-  stopped();
-}
-
 void openGripper() {
   arm.setOneAbsolute(GRIPPER, GRIPPER_OPENED);
 }
 
 void closeGripper() {
   arm.setOneAbsolute(GRIPPER, GRIPPER_CLOSED);
+}
+
+void blink() {
+
+  // 1. Accendere il LED per un secondo
+
+  // 2. Spengnere il LED e aspettare un secondo
+
+}
+
+void moving() {
+
+  // 3. Indicare che il robot è in fase di movimentazione automatico, tenendo il LED acceso
+
+}
+
+void stopped() {
+
+  // 4. Indicare che il robot ha smesso di muoversi in automatico, tenendo il LED spento
+
+}
+
+void loop() {
+
+  Serial.println("Starting movement");
+
+  // 5. Accendere il LED tre volte, come segnale di partenza
+
+  moving();
+
+  // 6. Inserire movimenti a scelta. Controllare il funzionamento del programma.
+
+  stopped();
+
 }

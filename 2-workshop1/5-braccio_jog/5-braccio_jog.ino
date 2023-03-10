@@ -24,16 +24,15 @@
 
 Braccio arm;
 
-int valPot1;
-int valPot2;
+// 1. Inizializzare i valori dei potenziometri
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Setting up Braccio with calibration values...");
 
   pinMode(13, OUTPUT); // LED
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
+
+  // 2. Impostare i pinMode analogici
 
   arm.setJointCenter(BASE_ROT, BASE_ROT_CENTER);
   arm.setJointMin(BASE_ROT, BASE_ROT_MIN);
@@ -87,16 +86,12 @@ void stopped() {
 
 void loop() {
 
-  valPot1 = analogRead(A0);
-  valPot2 = analogRead(A1);
-  Serial.println("Pot 1: " + String(valPot1) + " Pot2: " + String(valPot2));
-  int angle1 = map(valPot1, 0, 1023, 0, 180);
-  int angle2 = map(valPot2, 0, 1023, 0, 180);
-  Serial.println("Angolo base: " + String(angle1) + " Angolo gomito: " + String(angle2));
-  arm.setOneAbsolute(BASE_ROT, angle1);
-  arm.safeDelay(1000);
-  arm.setOneAbsolute(ELBOW, angle2);
-  arm.safeDelay(1000);
+  // 3. Leggere i due valori dai pin analog
+
+  // 4. Mappare i valori analogici agli angoli desiderati
+  
+  // 5. Spostare il giunto desiderato all'angolo calcolato
+  
 }
 
 void openGripper() {

@@ -3,10 +3,10 @@
 #include "constants.h"
 #include <string.h>
 
-int _jntCenter[6] = { 90, 82, 91, 98, 102, 70 };
+int _jntCenter[6] = { BASE_ROT_CENTER, SHOULDER_CENTER, ELBOW_CENTER, WRIST_CENTER, WRIST_ROT_CENTER, GRIPPER_CENTER };
 int _jntCenterMs[6] = {BASE_ROT_CENTER_MS, SHOULDER_CENTER_MS, ELBOW_CENTER_MS, WRIST_CENTER_MS, WRIST_ROT_CENTER_MS, GRIPPER_CENTER_MS};
-int _jntMin[6] = { 0, 0, 0, 10, 0, 40 };
-int _jntMax[6] = { 180, 180, 180, 190, 190, 100 };
+int _jntMin[6] = { BASE_ROT_MIN, SHOULDER_MIN, ELBOW_MIN, WRIST_MIN, WRIST_ROT_MIN, GRIPPER_MIN };
+int _jntMax[6] = { BASE_ROT_MAX, SHOULDER_MAX, ELBOW_MAX, WRIST_MAX, WRIST_ROT_MAX, GRIPPER_MAX };
 int _curPos[6] = { 0 };
 int _curPosMs[6] = { 0 };
 int _jntPins[6] = {_BASE_ROT_PIN, _SHOULDER_PIN, _ELBOW_PIN, _WRIST_PIN, _WRIST_ROT_PIN, _GRIPPER_PIN};
@@ -86,12 +86,20 @@ void moveAll(int a1, int a2, int a3, int a4, int a5, int a6, int ms) {
   moveTo(5, a6, ms);
 }
 
+void closeGripper() {
+  moveTo(5, GRIPPER_MAX, 50);
+}
+
+void openGripper() {
+  moveTo(5, GRIPPER_MIN, 50);
+}
+
 void setup() {
   Serial.begin(9600);
 
   Serial.println("Initializing...");
 
-  pinMode(SOFT_START_PIN, OUTPUT); // with soft start
+  pinMode(SOFT_START_PIN, OUTPUT); 
   digitalWrite(SOFT_START_PIN, LOW);
   _softStart();
 
@@ -102,7 +110,7 @@ void setup() {
     _jnt[i].attach(_jntPins[i]);
   }
 
-  moveHome(100);
+  moveHome(50);
 
   Serial.println("Setup complete.");
 }
@@ -117,21 +125,18 @@ void loop() {
   if (Serial.available()) {
     String input = Serial.readString();
     input.trim();
-    if (input == "stop") {
-      _stopped = true;
-      Serial.println(input);
-      moveHome(100); // go to home position when program stops
-    }
-    else if (input == "go") {
+    if (input == "go") {
       _stopped = true;
       Serial.println(input);
 
-      moveAll(0, 58, 59, 15, 0, 0, 50);
+      // 1. Esegui i movimenti desiderati
+      // 2. Ritorna a home
+
     }
     else if (input == "home") {
       _stopped = true;
       Serial.println(input);
-      moveHome(100);
+      moveHome(50);
     }
     else if (input == "0" | input == "1" | input == "2" | input == "3" | input == "4" | input == "5") {
       _stopped = true;
@@ -147,7 +152,7 @@ void loop() {
         }
         String input2 = Serial.readString();
         input2.trim();
-        if (input2 == "stop" | input2 == "") {
+        if (input2 == "stop") {
           Serial.println("Exiting manual control");
           break;
         }
@@ -155,3 +160,4 @@ void loop() {
     }
   }
 }
+

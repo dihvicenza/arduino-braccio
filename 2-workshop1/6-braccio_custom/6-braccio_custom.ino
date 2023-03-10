@@ -2,10 +2,27 @@
 #include <Servo.h>
 #include "constants.h"
 
-int _jntCenter[6] = { 90, 82, 91, 98, 102, 70 };
+
+
+
+// Array
+
+
+// Definizione funzioni
+
+
+
+
+
+
+
+
+
+
+int _jntCenter[6] = { BASE_ROT_CENTER, SHOULDER_CENTER, ELBOW_CENTER, WRIST_CENTER, WRIST_ROT_CENTER, GRIPPER_CENTER };
 int _jntCenterMs[6] = {BASE_ROT_CENTER_MS, SHOULDER_CENTER_MS, ELBOW_CENTER_MS, WRIST_CENTER_MS, WRIST_ROT_CENTER_MS, GRIPPER_CENTER_MS};
-int _jntMin[6] = { 0, 0, 0, 10, 0, 40 };
-int _jntMax[6] = { 180, 180, 180, 190, 190, 100 };
+int _jntMin[6] = { BASE_ROT_MIN, SHOULDER_MIN, ELBOW_MIN, WRIST_MIN, WRIST_ROT_MIN, GRIPPER_MIN };
+int _jntMax[6] = { BASE_ROT_MAX, SHOULDER_MAX, ELBOW_MAX, WRIST_MAX, WRIST_ROT_MAX, GRIPPER_MAX };
 int _curPos[6] = { 0 };
 int _curPosMs[6] = { 0 };
 int _jntPins[6] = {_BASE_ROT_PIN, _SHOULDER_PIN, _ELBOW_PIN, _WRIST_PIN, _WRIST_ROT_PIN, _GRIPPER_PIN};
@@ -51,9 +68,9 @@ void printPos(String option="ms") {
 }
 
 void moveHome(int ms) {
-  for (int i = 0; i < 6; i++) {
-    moveTo(i, _jntCenter[i], ms);
-  }
+
+  // 1. Scrivere una funzione per riportare i motori alle posizioni centrali
+
 }
 
 void moveTo(int jnt, int angle, int ms) {
@@ -83,11 +100,8 @@ void setup() {
   digitalWrite(SOFT_START_PIN, LOW);
   _softStart();
 
-  // pinMode(12, OUTPUT); // without soft start    
-  // digitalWrite(12, HIGH);
-
   for (int i = 0; i < 6; i++) {
-    _jnt[i].writeMicroseconds(_jntCenterMs[i]);
+    _jnt[i].write(_jntCenter[i]);
     _jnt[i].attach(_jntPins[i]);
   }
 
@@ -99,46 +113,10 @@ void setup() {
 void loop() {
 
   if (!_stopped) {
-    // moveTo(0, 10, 50);
-    // moveTo(0, 40, 50);
-
-    // moveTo(1, 50, 50);
-    // moveTo(1, 100, 50);
-
-    // moveTo(2, 70, 50);
-    // moveTo(2, 100, 50);
-
-    // moveTo(3, 70, 50);
-    // moveTo(3, 100, 50);
-
-    // moveTo(4, 70, 50);
-    // moveTo(4, 100, 50);
-
     moveTo(5, GRIPPER_MIN, 50);
     moveTo(5, GRIPPER_MAX, 50);
   }
 
-  if (Serial.available()) {
-    String input = Serial.readString();
-    input.trim();
-    if (input == "stop") {
-      _stopped = true;
-      Serial.println(input);
-      moveHome(100); // go to home position when program stops
-    }
-    else if (input == "go") {
-      _stopped = false;
-      Serial.println(input);
-    }
-    else if (input == "h") {
-      _stopped = true;
-      Serial.println(input);
-      moveHome(100);
-    }
-    else if (input == "1") {
-      _stopped = true;
-      Serial.println(input);
-      moveTo(1, 50, 50);
-    }
-  }
+  // 2. Gestire comandi di input da seriale: home, go, attivazione di un movimento
+
 }
