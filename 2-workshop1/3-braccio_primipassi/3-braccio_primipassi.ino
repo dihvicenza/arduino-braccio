@@ -26,7 +26,7 @@ Braccio arm;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Setting up Braccio with calibration values...");
+  Serial.println("Inizializzazione del Braccio con i valori di calibrazione...");
 
   arm.setJointCenter(BASE_ROT, BASE_ROT_CENTER);
   arm.setJointMin(BASE_ROT, BASE_ROT_MIN);
@@ -52,9 +52,9 @@ void setup() {
   arm.setJointMin(GRIPPER, GRIPPER_MIN);
   arm.setJointMax(GRIPPER, GRIPPER_MAX);
 
-  arm.begin(true);  // Start to default vertical position.
+  arm.begin(true);  
 
-  Serial.println("Set up complete.");
+  Serial.println("Set up completato.");
 }
 
 

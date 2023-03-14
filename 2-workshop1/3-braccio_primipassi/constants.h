@@ -1,5 +1,3 @@
-#define GRIPPER_CLOSED 95
-#define GRIPPER_OPENED 50
 #define BASE_ROT_CENTER 90
 #define BASE_ROT_MIN 0
 #define BASE_ROT_MAX 180
@@ -16,5 +14,5 @@
 #define WRIST_ROT_MIN 0
 #define WRIST_ROT_MAX 190
 #define GRIPPER_CENTER 70
-#define GRIPPER_MIN 40
-#define GRIPPER_MAX 100
+#define GRIPPER_MIN 40 // aperto
+#define GRIPPER_MAX 100 // chiuso

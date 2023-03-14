@@ -28,7 +28,7 @@ Braccio arm;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Setting up Braccio with calibration values...");
+  Serial.println("Inizializzazione Braccio con valori di calibrazione...");
 
   pinMode(13, OUTPUT); // LED
 
@@ -60,10 +60,10 @@ void setup() {
 
   arm.begin(true);
 
-  Serial.println("Set up complete.");
+  Serial.println("Inizializzazione completata.");
 }
 
-void blink() {
+void blinkLED() {
   digitalWrite(13, HIGH);   
   delay(1000);              
   digitalWrite(13, LOW);   
@@ -71,7 +71,7 @@ void blink() {
 }
 
 void moving() {
-  Serial.println("Starting movement");
+  Serial.println("Inizio movimento");
   for (int i = 0; i < 3; i++) {
     blink();
   }            

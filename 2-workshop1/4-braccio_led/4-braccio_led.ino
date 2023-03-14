@@ -26,7 +26,7 @@ Braccio arm;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Setting up Braccio with calibration values...");
+  Serial.println("Inizializzazione Braccio con valori di calibrazione...");
 
   arm.setJointCenter(BASE_ROT, BASE_ROT_CENTER);
   arm.setJointMin(BASE_ROT, BASE_ROT_MIN);
@@ -56,7 +56,7 @@ void setup() {
 
   arm.begin(true);
 
-  Serial.println("Set up complete.");
+  Serial.println("Inizializzazione completata.");
 }
 
 void openGripper() {
@@ -67,7 +67,7 @@ void closeGripper() {
   arm.setOneAbsolute(GRIPPER, GRIPPER_CLOSED);
 }
 
-void blink() {
+void blinkLED() {
 
   // 1. Accendere il LED per un secondo
 
@@ -89,7 +89,7 @@ void stopped() {
 
 void loop() {
 
-  Serial.println("Starting movement");
+  Serial.println("Inizio movimento");
 
   // 5. Accendere il LED tre volte, come segnale di partenza
 

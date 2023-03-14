@@ -97,7 +97,7 @@ void openGripper() {
 void setup() {
   Serial.begin(9600);
 
-  Serial.println("Initializing...");
+  Serial.println("Inizializzazione...");
 
   pinMode(SOFT_START_PIN, OUTPUT); 
   digitalWrite(SOFT_START_PIN, LOW);
@@ -112,7 +112,7 @@ void setup() {
 
   moveHome(50);
 
-  Serial.println("Setup complete.");
+  Serial.println("Inizializzazione completata.");
 }
 
 void loop() {
@@ -140,7 +140,7 @@ void loop() {
     }
     else if (input == "0" | input == "1" | input == "2" | input == "3" | input == "4" | input == "5") {
       _stopped = true;
-      Serial.println("Entering JOG mode");
+      Serial.println("Inizio modalità JOG");
       int j = atoi(input.c_str());
       while(1) {
         while (Serial.available()==0){
@@ -153,7 +153,7 @@ void loop() {
         String input2 = Serial.readString();
         input2.trim();
         if (input2 == "stop") {
-          Serial.println("Exiting manual control");
+          Serial.println("Termine modalità JOG");
           break;
         }
       }

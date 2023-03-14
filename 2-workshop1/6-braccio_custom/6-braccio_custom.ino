@@ -77,7 +77,7 @@ void moveTo(int jnt, int angle, int ms) {
 void setup() {
   Serial.begin(9600);
 
-  Serial.println("Initializing...");
+  Serial.println("Inizializzazione...");
 
   pinMode(SOFT_START_PIN, OUTPUT); // with soft start
   digitalWrite(SOFT_START_PIN, LOW);
@@ -90,7 +90,7 @@ void setup() {
 
   moveHome(100);
 
-  Serial.println("Initalization complete.");
+  Serial.println("Inizializzazione completata.");
 }
 
 void loop() {
