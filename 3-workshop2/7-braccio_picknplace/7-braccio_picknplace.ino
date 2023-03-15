@@ -3,10 +3,19 @@
 #include "constants.h"
 #include <string.h>
 
+// Posizioni centrali in gradi
 int _jntCenter[6] = { BASE_ROT_CENTER, SHOULDER_CENTER, ELBOW_CENTER, WRIST_CENTER, WRIST_ROT_CENTER, GRIPPER_CENTER };
+
+// Posizioni minime in gradi
 int _jntMin[6] = { BASE_ROT_MIN, SHOULDER_MIN, ELBOW_MIN, WRIST_MIN, WRIST_ROT_MIN, GRIPPER_MIN };
+
+// Posizioni massime in gradi
 int _jntMax[6] = { BASE_ROT_MAX, SHOULDER_MAX, ELBOW_MAX, WRIST_MAX, WRIST_ROT_MAX, GRIPPER_MAX };
+
+// Posizioni attuali in gradi
 int _curPos[6] = { 0 };
+
+// Pin associato a ogni servomotore
 int _jntPins[6] = {_BASE_ROT_PIN, _SHOULDER_PIN, _ELBOW_PIN, _WRIST_PIN, _WRIST_ROT_PIN, _GRIPPER_PIN};
 
 bool _stopped = false;
@@ -33,24 +42,28 @@ void _softStart() { // the Braccio Shield v4 controls voltage levels on startup
   digitalWrite(SOFT_START_PIN, HIGH);
 }
 
+/* Carica le posizioni attuali negli array rispettivi */
 void getPos() {
   for (int i = 0; i < 6; i++) {
     _curPos[i] = _jnt[i].read();
   }
 }
 
+/* Stampa in seriale le ultime posizioni registrate in gradi o in millisecondi */
 void printPos() {
   for (int i = 0; i < 6; i++) {
     Serial.println(_jnt[i].read());
   }
 }
 
+/* Riporta il braccio nella posizione di home */
 void moveHome(int ms) {
   for (int i = 0; i < 6; i++) {
     moveTo(i, _jntCenter[i], ms);
   }
 }
 
+/* Muovi il giunto <jnt> all'angolo <angle>. Velocità: 1 grado ogni <ms>  */
 void moveTo(int jnt, int angle, int ms) {
 
   getPos();
@@ -69,6 +82,7 @@ void moveTo(int jnt, int angle, int ms) {
   _curPos[jnt] = c;
 }
 
+/* Muovi tutti i giunti, in ordine */
 void moveAll(int a1, int a2, int a3, int a4, int a5, int a6, int ms) {
   moveTo(0, a1, ms);
   moveTo(1, a2, ms);
@@ -99,7 +113,7 @@ void setup() {
 
   for (int i = 0; i < 6; i++) {
     _jnt[i].write(_jntCenter[i]);
-    _jnt[i].attach(_jntPins[i]);
+    _jnt[i].attach(_jntPins[i]); // associa ogni servomotore al pin corrispondente
   }
 
   moveHome(50);
@@ -110,8 +124,8 @@ void setup() {
 void loop() {
 
   if (!_stopped) {
-    moveTo(5, GRIPPER_MIN, 50);
-    moveTo(5, GRIPPER_MAX, 50);
+    moveTo(5, GRIPPER_OPENED, 50);
+    moveTo(5, GRIPPER_CLOSED, 50);
   }
 
   if (Serial.available()) {
@@ -149,6 +163,9 @@ void loop() {
           break;
         }
       }
+    }
+    else if ("print") {
+      printPos();
     }
   }
 }

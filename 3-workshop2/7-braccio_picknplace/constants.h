@@ -1,14 +1,13 @@
 #define SOFT_START_VALUE 0
 #define SOFT_START_PIN 12
 
-#define BASE_ROT 0 //Base rotation joint
-#define SHOULDER 1 //Shoulder joint
-#define ELBOW 2 //Elbow joint
-#define WRIST 3 //Wrist joint
-#define WRIST_ROT 4 //Wrist rotation joint
-#define GRIPPER 5 //Gripper joint
+#define BASE_ROT 0 // Giunto di rotazione della base
+#define SHOULDER 1 // Giunto spalla
+#define ELBOW 2 // Giunto gomito
+#define WRIST 3 // Giunto polso
+#define WRIST_ROT 4 // Giunto di rotazione del polso 
+#define GRIPPER 5 // Giunto pinza
 
-//Don't change these.
 #define _BASE_ROT_PIN 11
 #define _SHOULDER_PIN 10
 #define _ELBOW_PIN 9
@@ -16,10 +15,11 @@
 #define _WRIST_ROT_PIN 5
 #define _GRIPPER_PIN 3
 
-//Max/min values for all servos globally
+// Valori massimi e minimi globali
 #define GLOBAL_MIN 0
 #define GLOBAL_MAX 180
 
+// Valori di calibrazione
 #define BASE_ROT_CENTER 90
 #define BASE_ROT_MIN 0
 #define BASE_ROT_MAX 180
