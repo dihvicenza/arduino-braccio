@@ -28,13 +28,13 @@ void _softwarePWM(int high_time, int low_time) { // NON MODIFICARE
   delayMicroseconds(low_time);
 }
 
-void _softStart() { // NON MODIFICARE
+void _softStart() { // the Braccio Shield v4 controls voltage levels on startup
   long int tmp = millis();
   while (millis() - tmp < 2000)
-    _softwarePWM(80, 450);  
+    _softwarePWM(80, 450);  //the sum should be 530usec
 
   while (millis() - tmp < 6000)
-    _softwarePWM(75, 430);  
+    _softwarePWM(75, 430);  //the sum should be 505usec
 
   digitalWrite(SOFT_START_PIN, HIGH);
 }
@@ -55,47 +55,47 @@ void printPos() {
 
 /* Riporta il braccio nella posizione di home */
 void moveHome(int ms) {
-
-  // 1. Scrivere una funzione per riportare i motori alle posizioni centrali
-
+  for (int i = 0; i < 6; i++) {
+    moveTo(i, _jntCenter[i], ms);
+  }
 }
 
 /* Muovi il giunto <jnt> all'angolo <angle>. Velocità: 1 grado ogni <ms>  */
 void moveTo(int jnt, int angle, int ms) {
 
-  getPos(); // aggiorna le posizioni attuali
+  getPos(); // leggi le posizioni attuali
 
   int c = _curPos[jnt];
   int t = angle;
-  int dir = 1; 
-  if (c > t) { // stabilisci il verso di rotazione
+  int dir = 1;
+  if (c > t) {
     dir = -1;
   }
-  while (abs(c - t) != 0) { // arriva alla posizione esatta
+  while (abs(c - t) != 0) {
     c += dir;
     _jnt[jnt].write(c);
     delay(ms);
   }
-  _curPos[jnt] = c; // aggiorna la posizione attuale del giunto
+  _curPos[jnt] = c;
 }
 
 void setup() {
   Serial.begin(9600);
 
-  Serial.println("Inizializzazione...");
+  Serial.println("Initializing...");
 
   pinMode(SOFT_START_PIN, OUTPUT); // NON MODIFICARE
   digitalWrite(SOFT_START_PIN, LOW);
   _softStart();
 
-  for (int i = 0; i < 6; i++) { 
+  for (int i = 0; i < 6; i++) {
     _jnt[i].write(_jntCenter[i]);
     _jnt[i].attach(_jntPins[i]); // associa ogni servomotore al pin corrispondente
   }
 
   moveHome(100); // porta il braccio in Home
 
-  Serial.println("Inizializzazione completata.");
+  Serial.println("Initalization complete.");
 }
 
 void loop() {
@@ -105,6 +105,26 @@ void loop() {
     moveTo(5, GRIPPER_MAX, 50);
   }
 
-  // 2. Gestire comandi di input da seriale: home, go, attivazione di un movimento
-
+  if (Serial.available()) {
+    String input = Serial.readString();
+    input.trim();
+    if (input == "go") { // riparti se fermo
+      _stopped = false;
+      Serial.println(input);
+    }
+    else if (input == "home") { // torna a casa
+      _stopped = true;
+      Serial.println(input);
+      moveHome(100);
+    }
+    else if (input == "1") { // esegui un movimento specifico
+      _stopped = true;
+      Serial.println(input);
+      moveTo(1, 50, 50);
+    }
+    else if (input == "print") { // stampa le ultime posizioni registrate
+      Serial.println(input);
+      printPos();
+    }
+  }
 }
