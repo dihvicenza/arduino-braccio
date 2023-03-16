@@ -9,10 +9,10 @@
 #define ELBOW_MAX 180
 #define WRIST_CENTER 98
 #define WRIST_MIN 10
-#define WRIST_MAX 190
+#define WRIST_MAX 180
 #define WRIST_ROT_CENTER 102
 #define WRIST_ROT_MIN 0
-#define WRIST_ROT_MAX 190
+#define WRIST_ROT_MAX 180
 #define GRIPPER_CENTER 70
 #define GRIPPER_MIN 40 // aperto
 #define GRIPPER_MAX 100 // chiuso
