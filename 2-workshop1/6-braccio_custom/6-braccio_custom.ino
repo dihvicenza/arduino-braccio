@@ -60,21 +60,41 @@ void moveHome(int ms) {
 
 }
 
+/* Limita lo spostamento ai limiti di calibrazione */
+int limitAngle(int jnt, int angle) {
+  if (angle > _jntMax[jnt]) { 
+    return _jntMax[jnt]; 
+  }
+  else if (angle < _jntMin[jnt]) { 
+    return _jntMin[jnt]; 
+  }
+  return angle;
+}
+
+/* Limita la velocità: ms per ogni grado di movimento */
+int limitSpeed(int ms) {
+  if (ms > 100) {return 100;}
+  else if (ms < 0) {return 0;}
+  return ms;
+}
+
 /* Muovi il giunto <jnt> all'angolo <angle>. Velocità: 1 grado ogni <ms>  */
 void moveTo(int jnt, int angle, int ms) {
 
   getPos(); // aggiorna le posizioni attuali
 
   int c = _curPos[jnt];
-  int t = angle;
+  int t = limitAngle(jnt, angle);
   int dir = 1; 
+
   if (c > t) { // stabilisci il verso di rotazione
     dir = -1;
   }
+
   while (abs(c - t) != 0) { // arriva alla posizione esatta
     c += dir;
     _jnt[jnt].write(c);
-    delay(ms);
+    delay(limitSpeed(ms));
   }
   _curPos[jnt] = c; // aggiorna la posizione attuale del giunto
 }
@@ -93,7 +113,7 @@ void setup() {
     _jnt[i].attach(_jntPins[i]); // associa ogni servomotore al pin corrispondente
   }
 
-  moveHome(100); // porta il braccio in Home
+  moveHome(50); // porta il braccio in Home
 
   Serial.println("Inizializzazione completata.");
 }
@@ -106,5 +126,8 @@ void loop() {
   }
 
   // 2. Gestire comandi di input da seriale: home, go, attivazione di un movimento
+
+
+
 
 }

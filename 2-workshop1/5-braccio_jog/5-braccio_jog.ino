@@ -73,7 +73,7 @@ void blinkLED() {
 void moving() {
   Serial.println("Inizio movimento");
   for (int i = 0; i < 3; i++) {
-    blink();
+    blinkLED();
   }            
   digitalWrite(13, HIGH);   
   delay(1000);
