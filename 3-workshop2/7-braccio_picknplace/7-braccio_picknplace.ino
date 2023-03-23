@@ -63,13 +63,19 @@ void moveHome(int ms) {
   }
 }
 
+int limitAngle(int jnt, int angle) {
+  if (angle > _jntMax[jnt]) return _jntMax[jnt];
+  if (angle < _jntMin[jnt]) return _jntMin[jnt];
+  return angle;
+}
+
 /* Muovi il giunto <jnt> all'angolo <angle>. Velocità: 1 grado ogni <ms>  */
-void moveTo(int jnt, int angle, int ms) {
+int moveTo(int jnt, int angle, int ms) {
 
   getPos();
 
   int c = _curPos[jnt];
-  int t = angle;
+  int t = limitAngle(jnt, angle);
   int dir = 1;
   if (c > t) {
     dir = -1;
@@ -80,6 +86,8 @@ void moveTo(int jnt, int angle, int ms) {
     delay(ms);
   }
   _curPos[jnt] = c;
+
+  return c;
 }
 
 /* Muovi tutti i giunti, in ordine */
@@ -152,8 +160,8 @@ void loop() {
         while (Serial.available()==0){
           valPot = analogRead(A0);
           int angle = map(valPot, 0, 1023, 0, 180);
-          moveTo(j, angle, 50);
-          Serial.println("Spostato giunto " + String(j) + " a " + String(angle));
+          int destination = moveTo(j, angle, 50);
+          Serial.println("Spostato giunto " + String(j) + " a " + String(destination));
           delay(1000);
         }
         String input2 = Serial.readString();
