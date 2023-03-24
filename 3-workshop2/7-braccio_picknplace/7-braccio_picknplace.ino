@@ -172,7 +172,7 @@ void loop() {
         }
       }
     }
-    else if ("print") {
+    else if (input == "print") {
       printPos();
     }
   }
